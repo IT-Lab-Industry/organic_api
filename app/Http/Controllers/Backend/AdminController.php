@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 use Hash;
 use App\Models\Admin;
+use Illuminate\Support\Facades\File;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class AdminController extends Controller
 {
@@ -28,12 +31,13 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(),[
                 'first_name'  => 'required|string|max:255',
                 'last_name'  => 'required|string|max:255',
-                'phone' => 'required|unique:admins,phone',
                 'email' => 'required|unique:admins,email|email',
                 'password'  => [
                     'required',
                     // Password::min(8)->symbols()->mixedCase()->numbers()->uncompromised()
-                ]
+                ],
+                'profile_photo' => 'required|mimes:jpg,png,jpeg,gif,svg'
+
             ]);
     
     
@@ -50,9 +54,20 @@ class AdminController extends Controller
             $admin = new Admin();
             $admin->first_name = $request->first_name;
             $admin->last_name = $request->last_name;
-            $admin->phone = $request->phone;
             $admin->email = $request->email;
             $admin->password = Hash::make($request->password);
+            if($request->hasFile('profile_image')){
+                $image = $request->file('profile_image');
+                $name = md5($image->getClientOriginalName()) . '_' . md5(time()) . '_rh' . '.jpg';
+                $path = public_path() . '/profile' . '/' . $name;
+                if(!File::exists(public_path() . '/profile')){
+                    File::makeDirectory(public_path() . '/profile');
+                }
+                $imageManager = new ImageManager(new Driver());
+                $imageManager->read($image)->save($path);
+                $admin->profile_image = $name;
+
+            }
             $admin->user_type = $user_type;
             $admin->status = 1;
             $admin->verify = 1;
