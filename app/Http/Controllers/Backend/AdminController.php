@@ -29,14 +29,13 @@ class AdminController extends Controller
         // }
 
         $validator = Validator::make($request->all(),[
-                'first_name'  => 'required|string|max:255',
-                'last_name'  => 'required|string|max:255',
+                'name'  => 'required|string|max:255',
                 'email' => 'required|unique:admins,email|email',
                 'password'  => [
                     'required',
                     // Password::min(8)->symbols()->mixedCase()->numbers()->uncompromised()
                 ],
-                'profile_photo' => 'required|mimes:jpg,png,jpeg,gif,svg'
+                'profile_image' => 'required|mimes:jpg,png,jpeg,gif,svg'
 
             ]);
     
@@ -50,10 +49,8 @@ class AdminController extends Controller
             }
     
             $user_type = 'admin';
-    
             $admin = new Admin();
-            $admin->first_name = $request->first_name;
-            $admin->last_name = $request->last_name;
+            $admin->name = $request->name;
             $admin->email = $request->email;
             $admin->password = Hash::make($request->password);
             if($request->hasFile('profile_image')){
