@@ -36,7 +36,6 @@ class AdminController extends Controller
                     // Password::min(8)->symbols()->mixedCase()->numbers()->uncompromised()
                 ],
                 'profile_image' => 'required|mimes:jpg,png,jpeg,gif,svg'
-
             ]);
     
     
@@ -63,7 +62,6 @@ class AdminController extends Controller
                 $imageManager = new ImageManager(new Driver());
                 $imageManager->read($image)->save($path);
                 $admin->profile_image = $name;
-
             }
             $admin->user_type = $user_type;
             $admin->status = 1;
