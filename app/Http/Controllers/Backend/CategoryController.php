@@ -47,7 +47,6 @@ class CategoryController extends Controller
         $category = new Category();
         $category->name = $request->name;
         $category->url = $this->createURL($request->name);
-        $category->status = $request->status;
         $category->parent_id = $request->parent_id;
 
         if($request->hasFile('logo')){
@@ -60,14 +59,12 @@ class CategoryController extends Controller
             $category->banner = $banner;
         }
 
-        if($request->hasFile('video')){
-            $video = Upload::video($request, $this->imagePath,'video');
-            $category->video = $video;
-        }
+        // if($request->hasFile('video')){
+        //     $video = Upload::video($request, $this->imagePath,'video');
+        //     $category->video = $video;
+        // }
 
-        $category->top_category = $request->top_category == 'true' ? 1 : 0;
         $category->featured = $request->featured == 'true' ? 1 : 0;
-        $category->footer = $request->footer;
 
         $category->meta_title = $request->meta_title;
         $category->keywords = $request->keywords;

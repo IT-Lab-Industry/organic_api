@@ -20,7 +20,7 @@ class AdminController extends Controller
 {
     public function registration(Request $request){
         // if(Admin::count()  == 0){
-            
+        
         // }else{
         //     return Response()->json([
         //         'status'    => 402,
