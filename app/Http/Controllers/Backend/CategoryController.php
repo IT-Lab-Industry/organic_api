@@ -34,6 +34,7 @@ class CategoryController extends Controller
 
 
     public function store(Request $request){
+        return Response()->json($request->all());
         $validator = Validator::make($request->all(),[
             'name'      => 'required|string|max:255',
             'status'    => 'required',
@@ -64,7 +65,7 @@ class CategoryController extends Controller
         //     $category->video = $video;
         // }
 
-        $category->featured = $request->featured == 'true' ? 1 : 0;
+        // $category->featured = $request->featured == 'true' ? 1 : 0;
 
         $category->meta_title = $request->meta_title;
         $category->keywords = $request->keywords;
