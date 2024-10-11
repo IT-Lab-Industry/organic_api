@@ -15,7 +15,7 @@ class CategoryController extends Controller
 {
     private $imagePath = 'category';
     public function all(){
-        $categories = Category::where('parent_id',null)->with('sub_categories')->get();
+        $categories = Category::latest()->where('parent_id',null)->with('sub_categories')->get();
         return Response()->json([
             'status'    => 200,
             'categories'=> $categories
@@ -34,10 +34,8 @@ class CategoryController extends Controller
 
 
     public function store(Request $request){
-        return Response()->json($request->all());
         $validator = Validator::make($request->all(),[
-            'name'      => 'required|string|max:255',
-            'status'    => 'required',
+            'name'      => 'required|string|max:255'
         ]);
         if($validator->fails()){
             return Response()->json([
@@ -104,7 +102,6 @@ class CategoryController extends Controller
     public function update(Request $request){
         $validator = Validator::make($request->all(),[
             'name'      => 'required|string|max:255',
-            'status'    => 'required',
             'id'        => 'required',
             'url'       => 'required|string|max:255'
         ]);
@@ -135,27 +132,25 @@ class CategoryController extends Controller
 
             
             if($request->hasFile('banner')){
-                if(File::exists($this->imagePath . '/' . $category->banner)){
+                if(File::exists($this->imagePath . '/' . $category->banner) && $category->banner){
                     unlink($this->imagePath . '/' . $category->banner);
                 }
                 $banner = Upload::image($request,$this->imagePath,'banner');
                 $category->banner = $banner;
             }
 
-            if($request->hasFile('video')){
-                if(File::exists($this->imagePath . '/' . $category->video)){
-                    unlink($this->imagePath . '/' . $category->video);
-                }
-                $video = Upload::video($request,$this->imagePath,'video');
-                $category->video = $video;
-            }
+            // if($request->hasFile('video')){
+            //     if(File::exists($this->imagePath . '/' . $category->video)){
+            //         unlink($this->imagePath . '/' . $category->video);
+            //     }
+            //     $video = Upload::video($request,$this->imagePath,'video');
+            //     $category->video = $video;
+            // }
 
-            $category->top_category = $request->top_category == 'true' ? 1 : 0;
-            $category->featured = $request->featured == 'true' ? 1 : 0;
+            // $category->featured = $request->featured == 'true' ? 1 : 0;
 
-            $category->status = $request->status;
             if($request->hasFile('logo')){
-                if(File::exists($this->imagePath . '/' . $category->logo)){
+                if(File::exists($this->imagePath . '/' . $category->logo) && $category->logo){
                     unlink($this->imagePath . '/' . $category->logo);
                 }
                 $logo = Upload::image($request,$this->imagePath,'logo');
