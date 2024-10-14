@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Facades\CustomURL;
+use App\Facades\Upload;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class BrandController extends Controller
 {
+
+
+    private $imagePath = 'brand';
     public function all(){
-        $brands = Brand::all();
+        $brands = Brand::latest()->get();
         return Response()->json([
             'status'    => 200,
-            'tags'      => $brands
+            'brands'      => $brands
         ]);
     }
 
@@ -29,7 +33,10 @@ class BrandController extends Controller
         }
         $brand = new Brand();
         $brand->name = $request->name;
-        $brand->logo = $request->logo;
+        if($request->hasFile('logo')){
+            $name = Upload::image($request,$this->imagePath,'logo');
+            $brand->logo = $name;
+        }
         $brand->slug = CustomURL::create($brand,'slug',$request->name);
         if($brand->save()){
             return Response()->json([
@@ -49,12 +56,12 @@ class BrandController extends Controller
         if($brand){
             return Response()->json([
                 'status'    => 200,
-                'tag'       => $brand
+                'brand'       => $brand
             ]);
         }else{
             return Response()->json([
                 'status'    => 404,
-                'message'   => 'Tag not found'
+                'message'   => 'Brand not found'
             ]);
         }
     }
