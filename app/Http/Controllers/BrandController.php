@@ -6,6 +6,7 @@ use App\Facades\CustomURL;
 use App\Facades\Upload;
 use App\Models\Brand;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class BrandController extends Controller
@@ -96,6 +97,10 @@ class BrandController extends Controller
                 }
                 $brand->slug = CustomURL::create($brand,'slug',$request->slug);
             }
+            if($request->hasFile('logo')){
+                $logo = Upload::image($request,$this->imagePath,'logo');
+                $brand->logo = $logo;
+            }
 
             if($brand->update()){
                 return Response()->json([
@@ -114,6 +119,9 @@ class BrandController extends Controller
     public function delete($id){
         $brand = Brand::find($id);
         if($brand){
+            if($brand->logo && File::exists(public_path() . '/' . $this->imagePath . '/' . $brand->logo)){
+                unlink(public_path() . '/' . $this->imagePath . '/' . $brand->logo);
+            }
             if($brand->delete()){
                 return Response()->json([
                     'status'    => 200,
