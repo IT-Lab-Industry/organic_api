@@ -53,6 +53,7 @@ class CategoryController extends Controller
             $category->logo = $logo;
         }
 
+
         if($request->hasFile('banner')){
             $banner = Upload::image($request,$this->imagePath,'banner');
             $category->banner = $banner;

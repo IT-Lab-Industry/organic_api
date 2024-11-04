@@ -21,7 +21,7 @@ class Upload{
     public function image($request, String $folderPath, $inputName = 'image'){
         $image = $request->file($inputName);
         $name = md5(time() . uniqid()) . '_rh' . '.jpg';
-        $path = $folderPath . '/';
+        $path = public_path() . '/' . $folderPath . '/';
         if(!File::exists($path)){
             File::makeDirectory($path);
         }
