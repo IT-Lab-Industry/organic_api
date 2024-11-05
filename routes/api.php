@@ -34,6 +34,9 @@ Route::prefix('v1')->group(function(){
                     Route::post('/update',[CategoryController::class, 'update'])->name('update');
                     Route::delete('/delete/{id}',[CategoryController::class, 'delete'])->name('delete');
 
+
+                    Route::post('/change-feature',[CategoryController::class, 'changeFeture'])->name('feature');
+
                     
                     // View
                     // Route::prefix('view')->group(function(){
