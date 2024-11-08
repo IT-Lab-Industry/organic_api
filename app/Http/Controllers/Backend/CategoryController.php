@@ -203,6 +203,35 @@ class CategoryController extends Controller
     }
 
 
+    public function changeFeture(Request $request){
+        $validator = Validator::make($request->all(), [
+            'id'    => 'required',
+            'feature'   => 'required'
+        ]);
+        if($validator->fails()){
+            return Response()->json([
+                'status'    => 401,
+                'errors'    => $validator->errors()->all()
+            ]);
+        }
+        $category = Category::find($request->id);
+        if($category){
+            $category->featured = $request->feature;
+            $category->update();
+
+            return Response()->json([
+                'status'    => 200,
+                'message'   => 'Feature Update Successfully'
+            ]);
+        }else{
+            return Response()->json([
+                'status'    => 404,
+                'message'   => 'Not Found'
+            ]);
+        }
+    }
+
+
 
 
 
