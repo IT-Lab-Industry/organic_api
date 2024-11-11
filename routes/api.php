@@ -80,6 +80,7 @@ Route::prefix('v1')->group(function(){
             });
 
 
+
             // Brands Api
             Route::prefix('brands')->group(function(){
                 Route::name('brands.')->group(function(){
@@ -118,6 +119,7 @@ Route::prefix('v1')->group(function(){
                 Route::name('product.')->group(function(){
                     Route::get('/all',[ProductController::class, 'all'])->name('all');
                     Route::post('/store',[ProductController::class, 'store'])->name('store');
+                    Route::post('/update',[ProductController::class, 'store'])->name('update');
                     Route::get('/category-lists',[ProductController::class, 'category_lists'])->name('category_all');
                     Route::get('/brand-lists',[ProductController::class, 'brand_lists'])->name('brand_lists');
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('thumbnail_image')->nullable();
             $table->text('product_description')->nullable();
             $table->tinyInteger('featured')->default(0);
+            $table->text('product_feature')->nullable();
             $table->double('price');
             $table->double('discount_price')->nullable();
             $table->string('discount_type')->nullable();
@@ -30,6 +31,8 @@ return new class extends Migration
             $table->string('meta_title')->nullable();
             $table->text('meta_keywords')->nullable();
             $table->text('meta_description')->nullable();
+            $table->tinyInteger('is_discount')->default(0);
+            $table->tinyInteger('is_faq')->default(0);
             $table->timestamps();
         });
     }
