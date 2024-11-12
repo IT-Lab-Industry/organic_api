@@ -118,8 +118,10 @@ Route::prefix('v1')->group(function(){
             Route::prefix('product')->group(function(){
                 Route::name('product.')->group(function(){
                     Route::get('/all',[ProductController::class, 'all'])->name('all');
+                    Route::get('/edit/{id}',[ProductController::class, 'edit'])->name('edit');
                     Route::post('/store',[ProductController::class, 'store'])->name('store');
-                    Route::post('/update',[ProductController::class, 'store'])->name('update');
+                    Route::post('/update',[ProductController::class, 'update'])->name('update');
+                    Route::delete('/delete/{id}',[ProductController::class, 'delete'])->name('delete');
                     Route::get('/category-lists',[ProductController::class, 'category_lists'])->name('category_all');
                     Route::get('/brand-lists',[ProductController::class, 'brand_lists'])->name('brand_lists');
 

@@ -132,13 +132,6 @@ class ProductController extends Controller
                     $newGallery->save();
                 }
             }
-
-            foreach($request->tags as $tag){
-                DB::table('tag_relation')->insert([
-                    'tag_id'        => $tag['id'],
-                    'product_id'    => $id
-                ]);
-            }
             foreach($request->faqs as $faq){
                 DB::table('f_a_q_s')->insert([
                     'question'        => $faq['question'],
@@ -159,7 +152,20 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::find($id);
+        if($product){
+            $galleries = Gallery::where('product_id',$product->id)->get();
+
+            $faqs = FAQ::select('*')->where('product_id',$product->id)->get();
+            return Response()->json([
+                'status'    => 200,
+                'productData' => [
+                    'product'   => $product,
+                    'galleries' => $galleries,
+                    'faqs'  => $faqs
+                ]
+            ]);
+        }
     }
 
     /**
@@ -167,7 +173,7 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        
     }
 
     /**
